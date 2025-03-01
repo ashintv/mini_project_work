@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
+        <!-- Profile Section (Left) -->
+        <div style="color: aqua;">
+            <h2>{{ current_user.username }}</h2>
+            <h3>Email: {{ current_user.email }}</h3>
+            <h3>Score: {{ current_user.score }}</h3>
+        </div>
+
+        <!-- Buttons Section (Right) -->
+        <div>
+            <a href="{{ url_for( 'create_meet') }}">
+                <button class="btn-light">Create a Meeting</button>
+            </a>
+            <a href="{{ url_for( 'join_meet' )}}">
+                <button class="btn-light">Join a Meeting</button>
+            </a>
+        </div>
+    </div>
+
+    <!-- Embedded Plotly Chart -->
+    <div>
+        {{ graph_html | safe }}
+    </div>
+{% endif %}
+{% endblock %}

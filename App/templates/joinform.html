@@ -1,0 +1,19 @@
+{% extends 'base.html'%}
+{% block title %}
+   Home
+{% endblock %}
+{% block content %}
+    <h3  style="color: aqua;">Join form</h3>
+    <div class="mb-3">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+        {{ form.JoinID.label(class="form-label fw-semibold") }}
+        {{ form.JoinID(class="form-control form-control-lg", placeholder="Enter JoinID / Meeting id") }}
+    
+        {{ form.SubmitField(class="btn btn-primary btn-lg fw-semibold") }}
+    </form>
+    </div>
+
+
+{% endblock %}

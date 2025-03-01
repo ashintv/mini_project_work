@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}
+    Login
+{% endblock %}
+{% block content %}
+
+<div class="shadow-lg p-4 rounded bg-light" style="max-width: 450px; width: 100%; backdrop-filter: blur(10px);">
+    <h2 class="text-center mb-4 fw-bold">Login</h2>
+    <form method="POST" class="needs-validation" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.username.label(class="form-label fw-semibold") }}
+            {{ form.username(class="form-control form-control-lg", placeholder="Enter Username") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.password.label(class="form-label fw-semibold") }}
+            <div class="input-group">
+                {{ form.password(class="form-control form-control-lg", placeholder="Enter Password", type="password") }}
+                <button class="btn btn-outline-secondary toggle-password" type="button"><i class="bi bi-eye"></i></button>
+            </div>
+        </div>
+
+        <div class="d-grid mt-4">
+            {{ form.submit(class="btn btn-primary btn-lg fw-semibold") }}
+        </div>
+    </form>
+
+    <div class="text-center mt-3">
+        <p class="mb-2">Don't have an account?</p>
+        <a href="{{ url_for('RegisterUser') }}" class="btn btn-outline-primary btn-lg w-100">Create Account</a>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function() {
+            let input = this.previousElementSibling;
+            if (input.type === "password") {
+                input.type = "text";
+                this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                input.type = "password";
+                this.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        });
+    });
+</script>
+
+{% endblock %}

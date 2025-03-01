@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+{% block title %}
+    Register
+{% endblock %}
+{% block content %}
+<div style="background:transparent; color: aliceblue; text-align: center;">
+    <h1>Create an account</h1>
+    
+        <form method="POST" class="form-register" style="color: aliceblue;">
+            {{ form.hidden_tag() }}
+            {{ form.username.label }}
+            {{ form.username(class="form-control", placeholder="User Name")}}
+
+            {{ form.email.label }}
+            {{ form.email(class="form-control", placeholder="abc@gmail.com")}}
+
+            {{ form.password1.label }}
+            {{ form.password1(class="form-control", placeholder="Password")}}
+
+            {{ form.password2.label }}
+            {{ form.password2(class="form-control", placeholder="enter your password again")}}
+            
+            <br>
+            {{ form.submit(class="btn btn-lg btn-block btn-primary " , placeholder="Sign up")}}
+        </form>
+    <br>
+
+    <a href="{{ url_for('login') }}">
+        <button class="btn btn-lg btn-block btn-primary" >
+            Sign in
+        </button>
+   
+</div>
+</div>
+{% endblock %}

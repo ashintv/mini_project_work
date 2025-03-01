@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block content %}
+<form method="POST" class="needs-validation" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+        {{ form.title.label(class="form-label fw-semibold") }}
+        {{ form.title(class="form-control form-control-lg", placeholder="Enter Username") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.JoinID.label(class="form-label fw-semibold") }}
+        {{ form.JoinID(class="form-control form-control-lg", placeholder="Enter Meeting id") }}
+    </div>
+
+    <div class="d-grid mt-4">
+        {{ form.SubmitField(class="btn btn-primary btn-lg fw-semibold") }}
+    </div>
+</form>
+{% endblock %}
