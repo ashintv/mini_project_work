@@ -1,8 +1,8 @@
 from flask import render_template , request ,redirect , url_for ,flash 
 from App import app, db ,socketio
 from App.model import Meeting ,User ,UserMeet 
-from App.prediction import process_emotion_gaze
-import threading 
+
+
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from App import forms
 from flask_login import login_user ,logout_user , login_required , current_user
