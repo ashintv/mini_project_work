@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}
+    FreeFlow
+{% endblock %}
+{% block content %}
+    {% for d in data %}
+    <h3>{{ d }}</h3>
+    {% endfor %}
+
+    <a href="{{ url_for('redirect_meet', JoinURL=JoinURL) }}" target="_blank" rel="noopener noreferrer">
+        Go to event
+    </a>
+{% endblock %}

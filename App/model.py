@@ -42,6 +42,7 @@ class Meeting(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)
     joinID = db.Column(db.String(50),nullable = False)  # Default value
     status = db.Column(db.String(10), default="active")
+    JoinURL = db.Column(db.String(100), nullable =False)
     participants = db.relationship("UserMeet", backref="meeting", lazy=True)
 
 # UserMeet (Association Table)
@@ -49,6 +50,8 @@ class UserMeet(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
     meet_id = db.Column(db.Integer, db.ForeignKey("meeting.id"), primary_key=True)
     score = db.Column(db.Integer, default=0)
+    emotion = db.Column(db.String, default = 'NA')
+    G_score = db.Column(db.Integer,default = 0 )
 
 # Global Ranking Model
 class GlobalRanking(db.Model):
@@ -56,7 +59,8 @@ class GlobalRanking(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     score = db.Column(db.Integer, default=0)
 # Reset Database
-
+# with app.app_context():
+#     db.create_all()
 
 #     print("⚠️ Dropping existing database...")
 #     db.drop_all()  # Deletes all tables

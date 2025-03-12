@@ -1,7 +1,7 @@
 from flask import render_template , request ,redirect , url_for ,flash 
 from App import app, db ,socketio
 from App.model import Meeting ,User ,UserMeet 
-from App.prediction import process_emotion_gaze
+from App.prediction import tracker
 import threading 
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from App import forms
@@ -14,6 +14,7 @@ from markupsafe import escape
 def main():
     #return render_template('profile.html', graph_html=graph_html)
     return render_template('landing.html' )
+
 
 
 
@@ -30,6 +31,9 @@ def dashboard():
     
     return render_template('dashboard.html' ,graph_html=graph_html)
 
+
+
+#user sign up
 @app.route('/register', methods=["GET", "POST"])
 def RegisterUser():
     form = forms.RegisterUser()
@@ -49,6 +53,8 @@ def RegisterUser():
 
 
 
+
+#user login
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = forms.LoginForm()
@@ -62,7 +68,7 @@ def login():
             flash(f'Username or password is incorrect',category='danger')
     return render_template('login.html',form = form)
 
-
+#user logout
 @app.route('/logout')
 @login_required
 def logout():
@@ -71,6 +77,7 @@ def logout():
     return redirect(url_for('main'))
 
 
+#create an event ( meeting ,  exam etc)
 @app.route('/create' , methods = ['GET','POST'])
 @login_required
 def create_meet():
@@ -78,7 +85,8 @@ def create_meet():
     if form.validate_on_submit():
         meeting_to_create = Meeting(
             title = form.title.data,
-            joinID  = form.JoinID.data
+            joinID  = form.JoinID.data,
+            JoinURL = form.JoinURL.data
         )
         db.session.add(meeting_to_create)
         db.session.commit()
@@ -90,6 +98,11 @@ def create_meet():
             flash(f'Error in Creating user {err}', category='danger')
     return render_template('create_meeting.html' ,  form=form)
 
+
+
+#participant joining meeting fun
+
+#change - should be returned to gaze prediction
 @app.route("/join" ,methods = ['GET' ,'POST'])
 @login_required
 def join_meet():
@@ -101,31 +114,47 @@ def join_meet():
             
             user_joined = UserMeet(
                 user_id = current_user.id,
-                meet_id = meeting.id
+                meet_id = meeting.id,
+                
             )
             db.session.add(user_joined)
             db.session.commit()
             flash('Joined meeting successfully' , category='success')
-        return redirect(url_for('meeting_dashboard' , meeting_id=meeting.id ))
+        return redirect(url_for('Tracker' , meeting_id=meeting.id ))
     
     if form.errors != {}:
         for err in form.errors.values():
             flash(f'Error in Creating user {err}', category='danger')
     return render_template('joinform.html' , form = form)
 
+
+
+@app.route('/event/<int:meeting_id>')
+def Tracker(meeting_id):
+    #edit
+    # meeting_entry =UserMeet.query.get(1)
+    # data = tracker()
+    # if meeting_entry:
+    #     meeting_entry.emotion = data[0]
+    #     meeting_entry.score = data[1]
+    #     db.session.commit()
+    data = [0,1,3]
+    JoinURL = db.session.query(Meeting.JoinURL).filter(Meeting.id == meeting_id).scalar()
+    # data base update happens here commit changes
+    return render_template('gaze.html' , JoinURL=JoinURL , data= data)
+
 @app.route("/meeting_dashboard/<int:meeting_id>")
 @login_required
 def meeting_dashboard(meeting_id):
     # Fetch users who joined this meeting
     data = (
-        db.session.query(User.username, UserMeet.score)
+        db.session.query(User.username, UserMeet.score , UserMeet.emotion , UserMeet.G_score)
         .join(UserMeet, User.id == UserMeet.user_id)
         .filter(UserMeet.meet_id == meeting_id)
         .all()
-    )
-
-
-    return render_template('Meeting.html' , data=data)
+    ) 
+    JoinURL = db.session.query(Meeting.JoinURL).filter(Meeting.id == meeting_id).scalar()
+    return render_template('Meeting.html' , data=data ,JoinURL = JoinURL)
 
 def end_meeting(meeting_id):
     meeting = Meeting.query.get(meeting_id)
@@ -135,3 +164,15 @@ def end_meeting(meeting_id):
         return True
     return False
 
+
+
+@app.route('/<path:JoinURL>')  # Use <path:JoinURL> to allow slashes in URL
+def redirect_meet(JoinURL):
+    print("Original URL:", JoinURL)
+    
+    # Ensure the URL has a proper protocol
+    if not JoinURL.startswith(("http://", "https://")):
+        JoinURL = "http://" + JoinURL  
+
+    print("Redirecting to:", JoinURL)
+    return redirect(JoinURL)

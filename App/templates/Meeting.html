@@ -10,17 +10,26 @@
             <tr>
                 <th>Participant</th>
                 <th>Score</th>
+                <th>Emotion</th>
+                <th>Global Score</th>
+
             </tr>
         </thead>
         <tbody>
-            {% for username,score in data %}
+            {% for username,score,emotion,G_score in data %}
             <tr>
                 <td>{{ username }}</td>
                 <td>{{ score }}</td>
+                <td>{{ emotion }}</td>
+                <td>{{ G_score }}</td>
+
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    <a href="{{ url_for('redirect_meet', JoinURL=JoinURL) }}" target="_blank" rel="noopener noreferrer">
+        Meeting Here
+    </a>
 </div>
 
 {% endblock %}

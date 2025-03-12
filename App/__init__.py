@@ -11,7 +11,7 @@ app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 app.config["SECRET_KEY"] = "your_secret_key_here"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://freeflowdb_owner:npg_QU3jmhdp9Nen@ep-white-glade-a12cuzvm-pooler.ap-southeast-1.aws.neon.tech/FreeFLOW?sslmode=require'
 app.config["SESSION_PERMANENT"] = False
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)

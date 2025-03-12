@@ -31,6 +31,7 @@ class JoinMeeting(FlaskForm): #create meeting form
             raise ValidationError('Meeting already exist')
     title  = StringField(label='Meeting Name : ' , validators=[Length(min=4 , max=30) ,DataRequired() ])
     JoinID = StringField(label="Join Code : " , validators=[Length(min=4),DataRequired()])
+    JoinURL = StringField(label='Join URL :' , validators=[DataRequired()])
     SubmitField = SubmitField(label='Create')
     
 class Entermeeting(FlaskForm):
@@ -40,3 +41,4 @@ class Entermeeting(FlaskForm):
             raise ValidationError('Meeting doed not exist')
     JoinID = StringField(label="Join Code : " , validators=[Length(min=4),DataRequired()])
     SubmitField = SubmitField(label='Join')
+    
