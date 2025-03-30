@@ -15,7 +15,7 @@ class User(db.Model ,UserMixin):
     password_hash = db.Column(db.String(60), nullable=False)
     score = db.Column(db.Integer, default=0)  # Default score to avoid null values
     meetings = db.relationship("UserMeet", backref="user", lazy=True)
-     
+    total_meeting = db.Column(db.Integer, default=0) 
      
     # an attribute for the db to return password
     @property
@@ -49,9 +49,12 @@ class Meeting(db.Model):
 class UserMeet(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
     meet_id = db.Column(db.Integer, db.ForeignKey("meeting.id"), primary_key=True)
+    l_score = db.Column(db.Integer, default=0)
     score = db.Column(db.Integer, default=0)
     emotion = db.Column(db.String, default = 'NA')
     G_score = db.Column(db.Integer,default = 0 )
+    e_gad = db.Column(db.String, default = 'Not Detected')
+
 
 # Global Ranking Model
 class GlobalRanking(db.Model):
@@ -59,8 +62,8 @@ class GlobalRanking(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     score = db.Column(db.Integer, default=0)
 # Reset Database
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+  db.create_all()
 
 #     print("⚠️ Dropping existing database...")
 #     db.drop_all()  # Deletes all tables

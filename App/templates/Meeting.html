@@ -1,35 +1,53 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% block title %}
    Home
 {% endblock %}
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center">Jinja 2-Column Table</h2>
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Participant</th>
-                <th>Score</th>
-                <th>Emotion</th>
-                <th>Global Score</th>
-
-            </tr>
-        </thead>
-        <tbody>
-            {% for username,score,emotion,G_score in data %}
-            <tr>
-                <td>{{ username }}</td>
-                <td>{{ score }}</td>
-                <td>{{ emotion }}</td>
-                <td>{{ G_score }}</td>
-
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{{ url_for('redirect_meet', JoinURL=JoinURL) }}" target="_blank" rel="noopener noreferrer">
-        Meeting Here
-    </a>
+    <h2 class="text-center fw-bold">Participant Scores</h2>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Participant</th>
+                   
+                    <th>Total Score</th>
+                    <th>Live Score</th>
+                    <th>Emotion</th>
+                    <th>Global Score</th>
+                    <th>--</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for username, score , l_score , emotion, G_score , e_gad in data %}
+                <tr class="text-center">
+                    <td class="d-flex align-items-center">
+                        <img src="https://api.dicebear.com/7.x/identicon/svg?seed={{ username }}" class="rounded-circle me-2" width="40" height="40" alt="Profile">
+                        <span class="fw-semibold">{{ username }}</span>
+                    </td>
+                    <td class="fw-bold {% if score|int < 50 %}text-danger{% elif score|int < 70 %}text-warning{% else %}text-success{% endif %}">
+                        {{ l_score }}%
+                    </td>
+                    <td class="fw-bold {% if score|int < 50 %}text-danger{% elif score|int < 70 %}text-warning{% else %}text-success{% endif %}">
+                        {{ score }}%
+                    </td>
+                    <td class="fw-semibold">{{ emotion }}</td>
+                    <td>${{ G_score }}</td>
+                    <td>{{ e_gad }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center mt-3">¸
+        <a href="#"><button>End Event</button></a>
+    </div>
 </div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+</style>
 
 {% endblock %}

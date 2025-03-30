@@ -1,27 +1,64 @@
 {% extends 'base.html' %}
-
-{% block title %}
-Profile
-{% endblock %}
-
+{% block title %}Join Meeting{% endblock %}
 {% block content %}
-<form method="POST" class="needs-validation" novalidate>
-    {{ form.hidden_tag() }}
 
-    <div class="mb-3">
-        {{ form.title.label(class="form-label fw-semibold") }}
-        {{ form.title(class="form-control form-control-lg", placeholder="Enter Username") }}
-    </div>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div >
+        <h2 class="text-center fw-bold mb-4">Create Meeting</h2>
+        <form method="POST" class="needs-validation" novalidate>
+            {{ form.hidden_tag() }}
 
-    <div class="mb-3">
-        {{ form.JoinID.label(class="form-label fw-semibold") }}
-        {{ form.JoinID(class="form-control form-control-lg", placeholder="Enter Meeting id") }}
-    </div>
-    {{ form.JoinURL.label(class="form-label fw-semibold") }}
-    {{ form.JoinURL(class="form-control form-control-lg", placeholder="Enter Join URL ") }}
+            <div class="mb-3 position-relative">
+                <i class="fas fa-user icon"></i>
+                {{ form.title(class="form-control", placeholder="Meeting Name") }}
+            </div>
 
-    <div class="d-grid mt-4">
-        {{ form.SubmitField(class="btn btn-primary btn-lg fw-semibold") }}
+            <div class="mb-3 position-relative">
+                <i class="fas fa-id-badge icon"></i>
+                {{ form.JoinID(class="form-control", placeholder="Enter Meeting ID") }}
+            </div>
+
+            <div class="mb-3 position-relative">
+                <i class="fas fa-link icon"></i>
+                {{ form.JoinURL(class="form-control", placeholder="Enter Join URL") }}
+            </div>
+
+            <div class="d-grid mt-4">
+                {{ form.SubmitField(class="btn btn-primary fw-semibold") }}
+            </div>
+        </form>
     </div>
-</form>
+</div>
+
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 400px;
+    }
+    .icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #fff;
+    }
+    .form-control {
+        padding-left: 35px;
+        border-radius: 8px;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: all 0.2s ease-in-out;
+    }
+    .btn-primary:hover {
+        transform: scale(1.05);
+    }
+</style>
+
 {% endblock %}

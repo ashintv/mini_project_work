@@ -26,7 +26,7 @@ class LoginForm(FlaskForm):
     
 class JoinMeeting(FlaskForm): #create meeting form
     def validate_meeting(self,meeting_id):
-        meeting = Meeting.query.filter_by(joinID = meeting_id)
+        meeting = Meeting.query.filter_by(joinID = meeting_id).first()
         if meeting:
             raise ValidationError('Meeting already exist')
     title  = StringField(label='Meeting Name : ' , validators=[Length(min=4 , max=30) ,DataRequired() ])
@@ -36,7 +36,7 @@ class JoinMeeting(FlaskForm): #create meeting form
     
 class Entermeeting(FlaskForm):
     def validate_meeting(self,meeting_id):
-        meeting = Meeting.query.filter_by(joinID = meeting_id)
+        meeting = Meeting.query.filter_by(joinID = meeting_id).first()
         if not  meeting:
             raise ValidationError('Meeting doed not exist')
     JoinID = StringField(label="Join Code : " , validators=[Length(min=4),DataRequired()])

@@ -1,33 +1,67 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Profile
-{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block content %}
 {% if current_user.is_authenticated %}
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
-        <!-- Profile Section (Left) -->
-        <div style="color: aqua;">
-            <h2>{{ current_user.username }}</h2>
-            <h3>Email: {{ current_user.email }}</h3>
-            <h3>Score: {{ current_user.score }}</h3>
+<div class="container py-5">
+    <div class="card border-0 shadow-lg p-4 rounded-4 bg-dark text-light">
+        <!-- Profile Header -->
+        <div class="text-center mb-4">
+            <img src="https://api.dicebear.com/7.x/identicon/svg?seed={{ current_user.username }}" 
+                 class="rounded-circle shadow border border-3 border-warning" 
+                 width="100" 
+                 height="100" 
+                 alt="Profile avatar">
+            <h2 class="mt-3 fw-bold">{{ current_user.username }}</h2>
+            <span class="badge bg-warning text-dark fs-6">
+                <i class="fas fa-medal"></i> Score: {{ current_user.score }}
+            </span>
         </div>
 
-        <!-- Buttons Section (Right) -->
-        <div>
-            <a href="{{ url_for( 'create_meet') }}">
-                <button class="btn-light">Create a Meeting</button>
-            </a>
-            <a href="{{ url_for( 'join_meet' )}}">
-                <button class="btn-light">Join a Meeting</button>
-            </a>
+        <!-- Action Buttons -->
+        <div class="row g-3 text-center">
+            <div class="col-md-6">
+                <a href="{{ url_for('create_meet') }}" 
+                   class="btn btn-primary w-100 py-3 shadow-sm">Create Event</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{{ url_for('join_meet') }}" 
+                   class="btn btn-success w-100 py-3 shadow-sm">Join Event</a>
+            </div>
+        </div>
+
+        <!-- Achievements Section -->
+        <div class="mt-4">
+            <h4 class="text-center mb-3"><i class="fas fa-trophy me-2"></i>Achievements</h4>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <div class="achievement-card p-3 rounded bg-secondary bg-opacity-25 text-center">
+                    <img src="https://www.svgrepo.com/show/404577/fire-flame.svg" width="50" alt="Focus streak">
+                    <div class="mt-2 small">5-Day Focus Streak</div>
+                </div>
+                <div class="achievement-card p-3 rounded bg-secondary bg-opacity-25 text-center">
+                    <img src="https://www.svgrepo.com/show/374047/clock.svg" width="50" alt="Productive session">
+                    <div class="mt-2 small">10 Productive Sessions</div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Embedded Plotly Chart -->
-    <div>
-        {{ graph_html | safe }}
-    </div>
+<style>
+    .btn {
+        transition: all 0.2s ease-in-out;
+    }
+    .btn:hover {
+        transform: scale(1.05);
+    }
+    .achievement-card {
+        width: 120px;
+        transition: transform 0.2s ease;
+    }
+    .achievement-card:hover {
+        transform: scale(1.1);
+    }
+</style>
 {% endif %}
 {% endblock %}

@@ -1,13 +1,13 @@
 from flask import render_template , request ,redirect , url_for ,flash 
 from App import app, db ,socketio
 from App.model import Meeting ,User ,UserMeet 
-from App.prediction import tracker
+from App import prediction
 import threading 
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+
 from App import forms
 from flask_login import login_user ,logout_user , login_required , current_user
 import plotly.express as px
-from markupsafe import escape
+
 
 @app.route('/')
 @app.route('/home')
@@ -109,9 +109,8 @@ def join_meet():
     form = forms.Entermeeting()
     if form.validate_on_submit():
         meeting = Meeting.query.filter_by(joinID = form.JoinID.data).first()
-        rejoin = UserMeet.query.filter_by(user_id = current_user.id).first()
+        rejoin = UserMeet.query.filter_by(user_id=current_user.id, meet_id=meeting.id).first()
         if rejoin is None:
-            
             user_joined = UserMeet(
                 user_id = current_user.id,
                 meet_id = meeting.id,
@@ -131,24 +130,32 @@ def join_meet():
 
 @app.route('/event/<int:meeting_id>')
 def Tracker(meeting_id):
-    #edit
-    # meeting_entry =UserMeet.query.get(1)
-    # data = tracker()
-    # if meeting_entry:
-    #     meeting_entry.emotion = data[0]
-    #     meeting_entry.score = data[1]
-    #     db.session.commit()
+    
+    if not prediction.estimation_running:
+            prediction.estimation_running = True
+            prediction.estimation_thread = threading.Thread(
+                target=prediction.estimate_and_update_score, 
+                args=(app, meeting_id ,current_user.id,db),
+                daemon=True
+            )
+            prediction.estimation_thread.start()
     data = [0,1,3]
     JoinURL = db.session.query(Meeting.JoinURL).filter(Meeting.id == meeting_id).scalar()
     # data base update happens here commit changes
-    return render_template('gaze.html' , JoinURL=JoinURL , data= data)
+    return render_template('gaze.html' , JoinURL=JoinURL)
+@app.route('/event/end')
+def endTracker():
+    prediction.estimation_running = False
+    print('ended')
+    return redirect(url_for('dashboard'))
+
 
 @app.route("/meeting_dashboard/<int:meeting_id>")
 @login_required
 def meeting_dashboard(meeting_id):
     # Fetch users who joined this meeting
     data = (
-        db.session.query(User.username, UserMeet.score , UserMeet.emotion , UserMeet.G_score)
+        db.session.query(User.username,UserMeet.l_score, UserMeet.score , UserMeet.emotion , UserMeet.G_score, UserMeet.e_gad)
         .join(UserMeet, User.id == UserMeet.user_id)
         .filter(UserMeet.meet_id == meeting_id)
         .all()

@@ -3,11 +3,15 @@
     FreeFlow
 {% endblock %}
 {% block content %}
-    {% for d in data %}
-    <h3>{{ d }}</h3>
-    {% endfor %}
-
-    <a href="{{ url_for('redirect_meet', JoinURL=JoinURL) }}" target="_blank" rel="noopener noreferrer">
-        Go to event
-    </a>
+<div class="container text-center mt-5">
+    <h2 class="fw-bold text-primary">FreeFlow Event</h2>
+    <div class="mt-4">
+        <a href="{{ url_for('redirect_meet', JoinURL=JoinURL) }}" target="_blank" class="btn btn-primary btn-lg fw-semibold">
+            Go to Event
+        </a>
+        <a href="{{ url_for('endTracker') }}" class="btn btn-danger btn-lg fw-semibold ms-3">
+            Exit Event
+        </a>
+    </div>
+</div>
 {% endblock %}

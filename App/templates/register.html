@@ -1,35 +1,43 @@
-{% extends 'base.html'%}
-{% block title %}
-    Register
-{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
 {% block content %}
-<div style="background:transparent; color: aliceblue; text-align: center;">
-    <h1>Create an account</h1>
-    
-        <form method="POST" class="form-register" style="color: aliceblue;">
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="glass-card p-4">
+        <h2 class="text-center fw-bold mb-4">Create an Account</h2>
+        <form method="POST" class="needs-validation" novalidate>
             {{ form.hidden_tag() }}
-            {{ form.username.label }}
-            {{ form.username(class="form-control", placeholder="User Name")}}
 
-            {{ form.email.label }}
-            {{ form.email(class="form-control", placeholder="abc@gmail.com")}}
+            <div class="mb-3 position-relative">
+                <i class="fas fa-user icon"></i>
+                {{ form.username(class="form-control", placeholder="Enter Username") }}
+            </div>
 
-            {{ form.password1.label }}
-            {{ form.password1(class="form-control", placeholder="Password")}}
+            <div class="mb-3 position-relative">
+                <i class="fas fa-envelope icon"></i>
+                {{ form.email(class="form-control", placeholder="Email Address") }}
+            </div>
 
-            {{ form.password2.label }}
-            {{ form.password2(class="form-control", placeholder="enter your password again")}}
-            
-            <br>
-            {{ form.submit(class="btn btn-lg btn-block btn-primary " , placeholder="Sign up")}}
+            <div class="mb-3 position-relative">
+                <i class="fas fa-lock icon"></i>
+                {{ form.password1(class="form-control", placeholder="Enter Password", type="password") }}
+            </div>
+
+            <div class="mb-3 position-relative">
+                <i class="fas fa-lock icon"></i>
+                {{ form.password2(class="form-control", placeholder="Confirm Password", type="password") }}
+            </div>
+
+            <div class="d-grid mt-4">
+                {{ form.submit(class="btn btn-primary fw-semibold") }}
+            </div>
         </form>
-    <br>
 
-    <a href="{{ url_for('login') }}">
-        <button class="btn btn-lg btn-block btn-primary" >
-            Sign in
-        </button>
-   
+        <div class="text-center mt-3">
+            <p>Already have an account?</p>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-light w-100">Sign In</a>
+        </div>
+    </div>
 </div>
-</div>
+
 {% endblock %}
