@@ -15,10 +15,8 @@ def e_detect(frame ):
                 cls = int(box.cls[0].item())  # Class index
                 label = model.names[cls]  # Class name
                 if label in ["laptop", "cell phone", "remote"]:
-                   print(label) 
                    return label
                 else:
-                    print('Nop')
                     return 'No Gadget Found'
 
     

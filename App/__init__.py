@@ -9,7 +9,9 @@ app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 app.config["SECRET_KEY"] = "your_secret_key_here"
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://db_owner:npg_j7xXUHZW4wBh@ep-summer-paper-a8hge17n-pooler.eastus2.azure.neon.tech/db?sslmode=require"
+
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)  # ✅ Initialize Bcrypt here
 login_manager = LoginManager(app)
